@@ -1,6 +1,8 @@
 # gin-rest-api
 Simple gin rest api
 
+Проект будет дополняться
+
 # Авторизация
 Доступна по конечным точкам:
 
@@ -9,6 +11,6 @@ Simple gin rest api
 Получение токена: http://localhost:8000/auth/sign-in
 
 
-#Postman коллекция для тестирования
+# Postman коллекция для тестирования
 
 https://www.getpostman.com/collections/4e951cbb47ead4d4f338
