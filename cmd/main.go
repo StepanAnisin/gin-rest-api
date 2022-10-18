@@ -1,20 +1,20 @@
 package main
 
 import (
-	"log"
-
 	todo "github.com/StepanAnisin/gin-rest-api"
 	"github.com/StepanAnisin/gin-rest-api/pkg/handler"
 	"github.com/StepanAnisin/gin-rest-api/pkg/repository"
 	"github.com/StepanAnisin/gin-rest-api/pkg/service"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
 
 	if err := initConfig(); err != nil {
-		log.Fatalf("error occured while initializing configs: %s", err.Error())
+		logrus.Fatalf("error occured while initializing configs: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -26,7 +26,7 @@ func main() {
 		SSLMode:  viper.GetString("db.sslmode"),
 	})
 	if err != nil {
-		log.Fatalf("failed to initialize database %s", err.Error())
+		logrus.Fatalf("failed to initialize database %s", err.Error())
 	}
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
@@ -34,7 +34,7 @@ func main() {
 
 	srv := new(todo.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		log.Fatalf("error occured while running htt server %s", err.Error())
+		logrus.Fatalf("error occured while running htt server %s", err.Error())
 	}
 }
 
