@@ -3,10 +3,11 @@ package service
 import (
 	"crypto/sha1"
 	"fmt"
+	"time"
+
 	"github.com/StepanAnisin/gin-rest-api/models"
 	"github.com/StepanAnisin/gin-rest-api/pkg/repository"
 	"github.com/dgrijalva/jwt-go"
-	"time"
 )
 
 const salt = "zdarovabratan12345"
@@ -17,7 +18,7 @@ type AuthService struct {
 	repo repository.Authorization
 }
 
-type TokenClaims struct {
+type tokenClaims struct {
 	jwt.StandardClaims
 	UserId int `json:"user_id"`
 }
@@ -43,12 +44,14 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, &TokenClaims{
-		StandardClaims: jwt.StandardClaims{
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
+		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(tokenLT).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
-		UserId: user.Id,
+		user.Id,
 	})
+
 	return token.SignedString([]byte(signKey))
 }
