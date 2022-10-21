@@ -3,6 +3,10 @@ Simple gin rest api
 
 Проект будет дополняться, в данный момент описана авторизация сервиса
 
+# Quit start
+
+`make build ; make run ; make migrate`
+
 # Авторизация
 Доступна по конечным точкам:
 
