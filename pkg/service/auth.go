@@ -16,7 +16,7 @@ const signKey = "123#$%FASD"
 const tokenLT = time.Minute * 10
 
 type AuthService struct {
-	repo repository.Authorization
+	AuthRepo repository.AuthRepository
 }
 
 type tokenClaims struct {
@@ -24,8 +24,8 @@ type tokenClaims struct {
 	UserId int `json:"user_id"`
 }
 
-func NewAuthService(repo repository.Authorization) *AuthService {
-	return &AuthService{repo: repo}
+func NewAuthService(repo repository.AuthRepository) *AuthService {
+	return &AuthService{AuthRepo: repo}
 }
 
 func (s *AuthService) ParseToken(accessToken string) (int, error) {
@@ -47,9 +47,10 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 
 	return claims.UserId, nil
 }
+
 func (s *AuthService) CreateUser(user models.User) (int, error) {
 	user.Password = s.generatePasswordHash(user.Password)
-	return s.repo.CreateUser(user)
+	return s.AuthRepo.CreateUser(user)
 }
 
 func (s *AuthService) generatePasswordHash(password string) string {
@@ -60,7 +61,7 @@ func (s *AuthService) generatePasswordHash(password string) string {
 }
 
 func (s *AuthService) GenerateToken(username, password string) (string, error) {
-	user, err := s.repo.GetUser(username, s.generatePasswordHash(password))
+	user, err := s.AuthRepo.GetUser(username, s.generatePasswordHash(password))
 	if err != nil {
 		return "", err
 	}

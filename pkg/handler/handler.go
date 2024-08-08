@@ -6,11 +6,11 @@ import (
 )
 
 type Handler struct {
-	services *service.Service
+	authService *service.AuthorizationService
 }
 
-func NewHandler(services *service.Service) *Handler {
-	return &Handler{services: services}
+func NewHandler(authService *service.AuthorizationService) *Handler {
+	return &Handler{authService: authService}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
