@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/StepanAnisin/gin-rest-api/internal"
 	"github.com/StepanAnisin/gin-rest-api/internal/config"
 	"gorm.io/driver/postgres"
 
@@ -28,8 +29,8 @@ func main() {
 	authRepo := repository.NewAuthRepository(dbConnection)
 	authService := service.NewAuthorizationService(authRepo)
 	handlers := handler.NewHandler(authService)
+	srv := internal.NewHttpServer(conf, handlers)
 
-	srv := NewHttpServer(conf, handlers)
 	srv.Run(ctx)
 	logrus.Print("App Started")
 

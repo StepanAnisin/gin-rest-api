@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"context"
@@ -20,19 +20,7 @@ type HttpServer struct {
 	httpServer http.Server
 }
 
-func NewHttpServer(config *config.Config, handlers *handler.Handler) *HttpServer {
-	return &HttpServer{
-		httpServer: http.Server{
-			Addr:           ":" + config.HttpConfig.Port,
-			Handler:        handlers.InitRoutes(),
-			MaxHeaderBytes: maxHeaderBytes,
-			ReadTimeout:    readTimeout,
-			WriteTimeout:   writeTimeout,
-		},
-	}
-}
-
-func (s *HttpServer) Run(ctx context.Context) error {
+func (s *HttpServer) Run(ctx context.Context) {
 	go func() {
 		_, cancel := context.WithCancel(ctx)
 		err := s.httpServer.ListenAndServe()
@@ -47,4 +35,16 @@ func (s *HttpServer) Run(ctx context.Context) error {
 
 func (s *HttpServer) Shutdown(ctx context.Context) error {
 	return s.httpServer.Shutdown(ctx)
+}
+
+func NewHttpServer(config *config.Config, handlers *handler.Handler) *HttpServer {
+	return &HttpServer{
+		httpServer: http.Server{
+			Addr:           ":" + config.HttpConfig.Port,
+			Handler:        handlers.InitRoutes(),
+			MaxHeaderBytes: maxHeaderBytes,
+			ReadTimeout:    readTimeout,
+			WriteTimeout:   writeTimeout,
+		},
+	}
 }
