@@ -28,7 +28,6 @@ definitions:
     - password
     - username
     type: object
-host: localhost:8000
 info:
   contact: {}
   description: API server for template Application
@@ -113,4 +112,9 @@ paths:
       summary: SignUp
       tags:
       - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

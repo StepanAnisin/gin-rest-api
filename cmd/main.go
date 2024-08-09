@@ -21,12 +21,12 @@ import (
 // @version 1.0
 // @description API server for template Application
 
-// @host localhost:8000
 // @BasePath /
 
-// @securityDefinition. apiKey ApiKeyAuth
+// @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
+
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 

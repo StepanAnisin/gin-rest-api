@@ -41,7 +41,7 @@ func NewHttpServer(config *config.Config, handlers *handler.Handler) *HttpServer
 	return &HttpServer{
 		httpServer: http.Server{
 			Addr:           ":" + config.HttpConfig.Port,
-			Handler:        handlers.InitRoutes(),
+			Handler:        handlers.InitRoutes(config.HttpConfig.Port),
 			MaxHeaderBytes: maxHeaderBytes,
 			ReadTimeout:    readTimeout,
 			WriteTimeout:   writeTimeout,

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	_ "github.com/StepanAnisin/gin-rest-api/cmd/docs"
+	docs "github.com/StepanAnisin/gin-rest-api/cmd/docs"
 	"github.com/StepanAnisin/gin-rest-api/pkg/service"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -16,9 +16,10 @@ func NewHandler(authService *service.AuthorizationService) *Handler {
 	return &Handler{authService: authService}
 }
 
-func (h *Handler) InitRoutes() *gin.Engine {
+func (h *Handler) InitRoutes(port string) *gin.Engine {
 	router := gin.New()
 
+	docs.SwaggerInfo.Host = port
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	auth := router.Group("/auth")
 	{
