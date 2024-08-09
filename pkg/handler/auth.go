@@ -35,11 +35,16 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 	id, err := h.authService.Authorization.CreateUser(input)
+	user, err := h.authService.Authorization.GetUserById(id)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"id	": id,
+		"username": user.Username,
 	})
 }
 

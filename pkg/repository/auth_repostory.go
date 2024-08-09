@@ -23,6 +23,34 @@ func (r *AuthRepository) CreateUser(user models.User) (int, error) {
 	return user.Id, nil
 }
 
+func (r *AuthRepository) GetUserById(id int) (*models.User, error) {
+	var user models.User
+	// Поиск пользователя по логину и паролю
+	result := r.db.Find(&user, id)
+
+	// Проверяем, найден ли пользователь
+	if result.Error != nil {
+		return nil, result.Error // ошибка при запросе
+	}
+
+	return &user, nil // возвращаем найденного пользователя
+
+}
+
+func (r *AuthRepository) GetUserByLogin(login string) (*models.User, error) {
+	var user models.User
+	// Поиск пользователя по логину и паролю
+	result := r.db.Where("username = ?", login).First(&user)
+
+	// Проверяем, найден ли пользователь
+	if result.Error != nil {
+		return nil, result.Error // ошибка при запросе
+	}
+
+	return &user, nil // возвращаем найденного пользователя
+
+}
+
 func (r *AuthRepository) GetUser(username, password string) (*models.User, error) {
 	var user models.User
 	// Поиск пользователя по логину и паролю

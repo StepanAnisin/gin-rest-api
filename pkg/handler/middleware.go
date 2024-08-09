@@ -9,7 +9,7 @@ import (
 
 const (
 	authorizationHeader = "Authorization"
-	userCtx             = "userId"
+	userCtx             = "userLogin"
 )
 
 func (h *Handler) userIdentity(c *gin.Context) {
@@ -30,13 +30,22 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
-	userId, err := h.authService.Authorization.ParseToken(headerParts[1])
+	userLogin, err := h.authService.Authorization.ParseToken(headerParts[1])
 	if err != nil {
 		newErrorResponse(c, http.StatusUnauthorized, err.Error())
 		return
 	}
 
-	c.Set(userCtx, userId)
+	user, err := h.authService.Authorization.GetUserByLogin(userLogin)
+	if err != nil {
+		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	if user == nil {
+		newErrorResponse(c, http.StatusUnauthorized, "No user by given username")
+		return
+	}
+	c.Set(userCtx, userLogin)
 }
 
 func getUserId(c *gin.Context) (int, error) {
