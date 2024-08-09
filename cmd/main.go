@@ -17,6 +17,16 @@ import (
 	"syscall"
 )
 
+// @Title gin-template API
+// @version 1.0
+// @description API server for template Application
+
+// @host localhost:8000
+// @BasePath /
+
+// @securityDefinition. apiKey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
